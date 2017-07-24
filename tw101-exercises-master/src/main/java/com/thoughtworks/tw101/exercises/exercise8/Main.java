@@ -9,6 +9,6 @@ public class Main {
     public static void main(String[] args) {
         Guess guessingGame = new Guess(100, 1);
 
-        guessingGame.promptRandomNumberGuessing();
+        guessingGame.getGuess(guessingGame.promptGuess());
     }
 }
