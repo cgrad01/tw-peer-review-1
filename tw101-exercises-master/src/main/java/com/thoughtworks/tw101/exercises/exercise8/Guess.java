@@ -19,28 +19,22 @@ public class Guess {
         guessNumber = rand.nextInt(max) + min;
     }
 
-    private boolean checkGuess(int guess, int number) {
+//    refactored to remove unneeded temp (dispesable)
+    private boolean checkGuess(int guess) {
         guessAttempts.add(guess);
-
-        if (guess == number) {
+        if (guess == guessNumber) {
             showCorrect(guess);
             return true;
-        } else if (guess > number) {
-            System.out.println(guess + " is too High.\n");
-            return false;
         } else {
-            System.out.println(guess + " is too Low.\n");
-            return false;
+            return evaluateMiss(guess);
         }
     }
 
+
     public void getGuess(Scanner scan) {
-        int guessNum;
-
         try {
-            guessNum = scan.nextInt();
-
-            while (!checkGuess(guessNum, guessNumber)) {
+            int guessNum = scan.nextInt();
+            while (!checkGuess(guessNum)) {
                 System.out.print("Guess the number between 1 and 100: ");
                 guessNum = scan.nextInt();
             }
@@ -51,6 +45,17 @@ public class Guess {
         }
 
     }
+
+//    extracted this from checkGuess() (dispenseable)
+    private boolean evaluateMiss(int guess) {
+        String missDirection = "Low\n";
+        if (guess > guessNumber) {
+            missDirection = "High.\n";
+        }
+        System.out.println(guess + " is too " + missDirection);
+        return false;
+    }
+
 //    extracted this method from getGuess() (bloater)
     public Scanner promptGuess(){
         Scanner scan = new Scanner(System.in);
