@@ -14,29 +14,29 @@ public class Guess {
     int guessNumber;
     ArrayList<Integer> guessAttempts = new ArrayList<Integer>();
     Random rand = new Random();
+    boolean gameOver = false;
 
     public Guess (int max, int min) {
         guessNumber = rand.nextInt(max) + min;
     }
 
-//    refactored to remove unneeded temp (dispesable)
-    private boolean checkGuess(int guess) {
+//    refactored to remove unneeded temp (dispensable)
+    private void checkGuess(int guess) {
         guessAttempts.add(guess);
         if (guess == guessNumber) {
             showCorrect(guess);
-            return true;
         } else {
-            return evaluateMiss(guess);
+            evaluateMiss(guess);
         }
     }
 
 
     public void getGuess(Scanner scan) {
         try {
-            int guessNum = scan.nextInt();
-            while (!checkGuess(guessNum)) {
+            checkGuess(scan.nextInt());
+            while (!gameOver) {
                 System.out.print("Guess the number between 1 and 100: ");
-                guessNum = scan.nextInt();
+                checkGuess(scan.nextInt());
             }
         } catch (NumberFormatException e) {
             System.out.println("Number was not entered. Could not parse String");
@@ -47,13 +47,13 @@ public class Guess {
     }
 
 //    extracted this from checkGuess() (dispenseable)
-    private boolean evaluateMiss(int guess) {
+//    simplified conditional (oo abuser)
+    private void evaluateMiss(int guess) {
         String missDirection = "Low\n";
         if (guess > guessNumber) {
             missDirection = "High.\n";
         }
         System.out.println(guess + " is too " + missDirection);
-        return false;
     }
 
 //    extracted this method from getGuess() (bloater)
@@ -65,6 +65,7 @@ public class Guess {
 
 //    extracted this method from checkGuess() (bloater)
     public void showCorrect(int guess) {
+        gameOver = true;
         System.out.println("You guessed " + guess + ". Correct!!!!!!\n");
         System.out.println("Your guesses were: ");
 
